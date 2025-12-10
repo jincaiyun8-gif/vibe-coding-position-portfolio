@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Position Portfolio — Vibe Coding (T564A)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #764ba2;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            border-left: 5px solid #667eea;
+            padding-left: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-left-color: #764ba2;
+            transform: translateX(10px);
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #764ba2;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::before {
+            content: '▶';
+            font-size: 0.7em;
+            transition: transform 0.3s ease;
+            color: #667eea;
+        }
+
+        .section.expanded .section-title::before {
+            transform: rotate(90deg);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .section.expanded .section-content {
+            max-height: 10000px;
+        }
+
+        .step {
+            opacity: 0;
+            transform: translateY(20px);
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.5s ease;
+        }
+
+        .step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .step p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .step blockquote {
+            border-left: 3px solid #764ba2;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px 20px;
+            border-radius: 8px;
+        }
+
+        .next-step-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .next-step-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .next-step-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .conclusion-box h4 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .conclusion-box ul {
+            margin-left: 25px;
+            line-height: 1.8;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro-text {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            border-radius: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .section-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Position Portfolio</h1>
+        <p class="subtitle">Vibe Coding (T564A) — Katrina Jin</p>
+
+        <!-- My Position Section -->
+        <div class="section" id="position-section">
+            <h2 class="section-title">My Evolving Position: What I Now Believe About AI as a Creative Partner</h2>
+            <div class="section-content">
+                <div class="step" data-step="1">
+                    <h3><span class="step-number">1</span>Initial Expectations</h3>
+                    <p>Over the past weeks in Vibe Coding, my understanding of AI as a creative partner has shifted from fascination and convenience to a much more complex stance of <strong>critical optimism</strong>. My early expectation was that AI might "fill in the gaps" of my technical skills and help me actualize ideas that previously felt out of reach.</p>
+                    <button class="next-step-btn" onclick="showNextStep('position-section', 2)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="2">
+                    <h3><span class="step-number">2</span>The Reality Check</h3>
+                    <p>While this did happen, I also learned that <strong>AI is not a neutral co-creator</strong>—it amplifies clarity when my intentions are strong, and exposes vagueness when I don't yet know what I truly want.</p>
+                    <button class="next-step-btn" onclick="showNextStep('position-section', 3)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="3">
+                    <h3><span class="step-number">3</span>My Core Belief</h3>
+                    <p>Through making four projects—<em>Teahouse of Balance</em>, <em>Nutrition Snap</em>, <em>Light Runner</em>, and <em>Oracle 9</em>—I now believe that:</p>
+                    <blockquote>
+                        AI is a powerful collaborator for expansion, but an unreliable partner for intuition. It can turn concepts into visual or functional prototypes with extraordinary speed, but it cannot sense atmosphere, intention, cultural depth, or emotional meaning unless I articulate those elements explicitly.
+                    </blockquote>
+                    <p>In other words, <strong>AI magnifies human creativity but cannot substitute for it.</strong></p>
+                    <button class="next-step-btn" onclick="showNextStep('position-section', 4)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="4">
+                    <h3><span class="step-number">4</span>The Illusion of Understanding</h3>
+                    <p>This position resonates with Weizenbaum's reminder that users often project understanding and meaning onto machines, even when the machine itself possesses none. Across my projects, I repeatedly confronted this illusion: the more I assumed AI "knew what I meant," the more it returned outputs that felt hollow or misaligned.</p>
+                    <p>This tension—between my imagination and the system's pattern-based generation—became the core of my learning.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evidence from Making Section -->
+        <div class="section" id="making-section">
+            <h2 class="section-title">Evidence From My Making</h2>
+            <div class="section-content">
+                <div class="step" data-step="1">
+                    <h3><span class="step-number">1</span>Teahouse of Balance — AI as a Force for Expansion</h3>
+                    <p>In this project, I developed the conceptual theme first: a space of balance, harmony, and calm. When I shared this with AI, the system was able to turn my loose abstractions into something concrete—rich visuals, detailed descriptions, and interface ideas.</p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 2)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="2">
+                    <h3><span class="step-number">2</span>The Empowerment & The Limitation</h3>
+                    <p>What surprised me was how <strong>empowering</strong> this felt. AI made me realize that someone without coding expertise can still create websites, apps, and interactions. Yet at the same time, AI lacked the emotional intuition I associated with "balance."</p>
+                    <p>I had to be precise about tone, light, movement, and mood; otherwise, the outputs felt generic. This was my first understanding that <strong>AI expands creative possibility but depends entirely on the clarity of my intention.</strong></p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 3)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="3">
+                    <h3><span class="step-number">3</span>Nutrition Snap — AI Mirrors My Specificity</h3>
+                    <p>This project emerged from a personal need: I'm not good at budgeting or tracking nutrition, and I wanted a tool that could help me visualize my weekly dietary patterns.</p>
+                    <p>When I gave AI a prompt, the textual outputs were good—but the visual style was totally wrong. I had imagined a clean, minimal, calming aesthetic, but AI generated bright, cartoonish images that clashed with my vision.</p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 4)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="4">
+                    <h3><span class="step-number">4</span>The Solution: Specificity</h3>
+                    <p>Only when I searched online for templates and fed AI a reference image did the system "understand" what I wanted.</p>
+                    <blockquote>
+                        This taught me that AI is not imaginative on its own—it interpolates between patterns. When my instructions were vague, the system returned the most statistically average aesthetic. When my instructions were specific, it could produce something aligned with my taste.
+                    </blockquote>
+                    <p><strong>This clarified my position: AI doesn't replace human taste—it depends on it.</strong></p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 5)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="5">
+                    <h3><span class="step-number">5</span>Light Runner — Embodied Creativity Cannot Be Automated</h3>
+                    <p>Trying different recommended games revealed an important personal insight: I enter flow most easily in timing- and avoiding-based games. A countdown intensifies urgency and focus, while avoiding obstacles activates a full-body attentiveness.</p>
+                    <p>This embodied sensation—my breath tightening, my heartbeat syncing with the tempo—was something AI could not replicate.</p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 6)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="6">
+                    <h3><span class="step-number">6</span>What AI Cannot Feel</h3>
+                    <p>AI helped me test mechanics and generate variations, but the experience itself emerged only when I played it. This project made me feel what Norbert Wiener warned: <strong>automation excels at logical structure but cannot reproduce the full human sensory world</strong>.</p>
+                    <p>AI can simulate timing, but it cannot feel timing. It lacks the sense of danger, speed, and embodiment that makes gameplay meaningful.</p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 7)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="7">
+                    <h3><span class="step-number">7</span>The Precision Requirement</h3>
+                    <p>Most importantly, AI forced me to articulate every detail—enemy movement speed, interval spacing, hitbox tolerance—because anything I did not explicitly specify was filled in by the model.</p>
+                    <p><strong>This reinforced my belief that AI magnifies precision but cannot improvise intuition.</strong></p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 8)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="8">
+                    <h3><span class="step-number">8</span>Oracle 9 — When AI Cannot Reach the Essence</h3>
+                    <p>This was my most challenging and disappointing project. Seeing the word <em>Magic</em>, I immediately associated it with astrology, tarot, and divination. I imagined a mystical, symbolic, emotionally charged experience.</p>
+                    <p>Yet the AI-generated readings were vague, templated, and not at all accurate when tested by my classmates. The system imitated surface aesthetics—fonts, colors, layout—but the spiritual essence felt missing.</p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 9)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="9">
+                    <h3><span class="step-number">9</span>The Appearance of Meaning</h3>
+                    <p>The output reminded me of Ruha Benjamin's argument that automated systems often mimic cultural forms without understanding their context, thereby creating "the appearance of neutrality" while erasing meaning.</p>
+                    <p>Oracle 9 felt exactly like that: <strong>a beautiful shell with no soul</strong>.</p>
+                    <button class="next-step-btn" onclick="showNextStep('making-section', 10)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="10">
+                    <h3><span class="step-number">10</span>My Strongest Stance</h3>
+                    <blockquote>
+                        AI cannot generate depth, only texture. The difference between "looking mystical" and "feeling mystical" is exactly the difference between probability and intuition, between pattern and consciousness.
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evidence from Reading Section -->
+        <div class="section" id="reading-section">
+            <h2 class="section-title">Evidence From My Reading</h2>
+            <div class="section-content">
+                <div class="intro-text">
+                    <p>Three readings shaped my final position:</p>
+                </div>
+
+                <div class="step" data-step="1">
+                    <h3><span class="step-number">1</span>Weizenbaum — The Illusion of Understanding</h3>
+                    <p>Weizenbaum showed that humans often imagine understanding where none exists, projecting intentionality onto systems that merely manipulate symbols.</p>
+                    <p>This explains my experience across all four projects: whenever I assumed AI "knew" my tone or meaning, it produced generic or misaligned results. The illusion broke most clearly in Oracle 9.</p>
+                    <button class="next-step-btn" onclick="showNextStep('reading-section', 2)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="2">
+                    <h3><span class="step-number">2</span>Norbert Wiener — Automation Cannot Replace Human Purpose</h3>
+                    <p>Wiener argued that automated systems excel in logic and efficiency but cannot provide human purpose or meaning.</p>
+                    <p>In Light Runner, AI was excellent at helping structure mechanics, but only I as a human could feel danger, rhythm, or joy. <strong>Creativity is embodied; AI is not.</strong></p>
+                    <button class="next-step-btn" onclick="showNextStep('reading-section', 3)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="3">
+                    <h3><span class="step-number">3</span>Ruha Benjamin — Patterned Outputs Reflect Patterned Bias</h3>
+                    <p>Benjamin helped me interpret Oracle 9's failures not as technical mistakes but as evidence of patterned predictability.</p>
+                    <p>AI reproduces templates because it is trained on templates. <strong>True creativity requires context, history, and cultural meaning—none of which AI possesses.</strong></p>
+                    <button class="next-step-btn" onclick="showNextStep('reading-section', 4)">Continue →</button>
+                </div>
+
+                <div class="step" data-step="4">
+                    <h3><span class="step-number">4</span>Conclusion: My Final Position</h3>
+                    <p>I now believe that <strong>AI is a collaborator that expands capacity but cannot deepen meaning</strong>. It helps transform ideas into tangible prototypes, especially for creators without technical skills. Yet AI cannot sense atmosphere, embodiment, cultural nuance, or spiritual intention. Its creativity is derivative, not intuitive.</p>
+
+                    <div class="conclusion-box">
+                        <h4>AI is therefore a mirror rather than a muse:</h4>
+                        <ul>
+                            <li>It reveals what I haven't articulated.</li>
+                            <li>It amplifies what I express clearly.</li>
+                            <li>It collapses into emptiness when I lack clarity.</li>
+                        </ul>
+                        <p style="margin-top: 20px;">As I leave Vibe Coding, I hold a stance of <strong>critical optimism</strong>. I am excited to use AI to prototype, visualize, and iterate—but I no longer expect it to provide creative depth. That part remains human.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle section expansion
+        document.querySelectorAll('.section').forEach(section => {
+            const title = section.querySelector('.section-title');
+            title.addEventListener('click', () => {
+                // Close other sections
+                document.querySelectorAll('.section').forEach(s => {
+                    if (s !== section && s.classList.contains('expanded')) {
+                        s.classList.remove('expanded');
+                        // Reset steps in closed sections
+                        s.querySelectorAll('.step').forEach(step => {
+                            step.classList.remove('visible');
+                        });
+                    }
+                });
+
+                // Toggle current section
+                section.classList.toggle('expanded');
+
+                // Show first step when opening
+                if (section.classList.contains('expanded')) {
+                    setTimeout(() => {
+                        const firstStep = section.querySelector('.step[data-step="1"]');
+                        if (firstStep) {
+                            firstStep.classList.add('visible');
+                        }
+                    }, 300);
+                }
+            });
+        });
+
+        // Show next step function
+        function showNextStep(sectionId, stepNumber) {
+            const section = document.getElementById(sectionId);
+            const nextStep = section.querySelector(`.step[data-step="${stepNumber}"]`);
+
+            if (nextStep) {
+                setTimeout(() => {
+                    nextStep.classList.add('visible');
+                    // Smooth scroll to the new step
+                    nextStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+
+        // Initial animation on load
+        window.addEventListener('load', () => {
+            document.querySelector('h1').style.animation = 'fadeInUp 1s ease';
+            document.querySelector('.subtitle').style.animation = 'fadeInUp 1s ease 0.2s both';
+        });
+    </script>
+</body>
+</html>
